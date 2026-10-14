@@ -1,54 +1,148 @@
-# HTML, CSS & JavaScript Lab Programs Directory
+# Natuse Full-Stack Lab Exam Reference Guide
 
-This folder contains all exercises cleanly organized so you can open any folder and run `index.html` directly in the browser with double-click.
-
----
-
-### Folder Map:
-
-| Folder Name | Description | Key Tech Used |
-| :--- | :--- | :--- |
-| **`ex1_symposium_html/`** | Exercise 1: College Symposium Website (TechNova 2026) | Pure HTML5 (7 pages, forms, tables, semantics) |
-| **`ex2_symposium_css/`** | Exercise 2: College Symposium with Full CSS Styling | CSS Grid, Flexbox, Box Model, Sticky Nav, Media Queries |
-| **`ex3_bingo_game/`** | Exercise 3: Two-Player 5x5 Bingo Game | JavaScript Array shuffle, DOM manipulation, 5-in-a-row win logic |
-| **`shape_rotate_color/`** | Shape 90° Rotation & Color Changer on Click | CSS `transform: rotate()`, `onclick` event listener |
-| **`form_validation/`** | Student Registration Form with Validation | JS Regex, Email, 10-digit Phone check, Error spans |
-| **`todo_calculator/`** | Simple Arithmetic Calculator & Dynamic Todo List | Basic JS Arithmetic & DOM `createElement` / `remove` |
+Backend Base URL: `http://localhost:8080/api/products`  
+Frontend Base URL: `http://localhost:5173/`
 
 ---
 
-### 1. Shape Rotation & Color Changer (`shape_rotate_color/index.html`)
-- **What it does:** Displays a colorful square. Every time you click it, it spins **90 degrees** smoothly (`transform: rotate(90deg)`) and cycles to a new color (crimson -> dodgerblue -> green -> orange -> purple).
-- **Core Code to remember:**
-  ```javascript
-  let angle = 0;
-  box.onclick = function() {
-    angle += 90;
-    box.style.transform = 'rotate(' + angle + 'deg)';
-    box.style.backgroundColor = colors[index++ % colors.length];
-  }
-  ```
+## 📌 TABLE OF CONTENTS
+1. [What is Currently Running (Pinia + Vue Router + Nested Routing)](#1-what-is-currently-running)
+2. [What to Do if Faculty Says: "NO Pinia, Only Props and $emit"](#2-alternative-a-no-pinia-only-props-and-emit)
+3. [What to Do if Faculty Says: "NO Nested Routing, Flat Routes Only"](#3-alternative-b-flat-routing-no-nested-children)
+4. [What to Do if Faculty Says: "NO Routing At All, Single File Only"](#4-alternative-c-single-file-appvue-only)
+5. [Complete Postman CRUD Endpoints & JSON Body](#5-postman-crud-reference)
 
 ---
 
-### 2. Two-Player Bingo Game (`ex3_bingo_game/index.html`)
-- **What it does:** Two 5x5 grids randomly filled with numbers 1 to 25. Players enter a number and click **Mark**. It highlights in green on both boards and checks rows, columns, and diagonals for a BINGO win.
-- **Core Logic:**
-  - `shuffle()`: Shuffles array of 1..25 numbers.
-  - `checkWin()`: Loops 5 rows, 5 cols, and 2 diagonals:
-    ```javascript
-    for (let i = 0; i < 5; i++) {
-      if ([0,1,2,3,4].every(c => marked[i * 5 + c])) return true; // row
-      if ([0,1,2,3,4].every(r => marked[r * 5 + i])) return true; // col
-    }
-    ```
+## 1. What is Currently Running
+Your frontend currently has:
+* **Pinia Global Store** (`src/stores/productStore.js`) managing products and cart state.
+* **Top-Level Routes**: `/` (Products), `/cart` (Cart), `/about` (About).
+* **Nested Child Routes**: `/about/team` and `/about/contact` rendered inside `AboutView.vue`'s `<router-view />`.
+
+### How Nested Routing Works in Code:
+In `src/router/index.js`:
+```javascript
+{
+  path: '/about',
+  component: AboutView,
+  children: [
+    { path: 'team', component: TeamView },       // URL: /about/team
+    { path: 'contact', component: ContactView }   // URL: /about/contact
+  ]
+}
+```
+Inside `AboutView.vue`, there is a second `<router-view />` where the child component gets injected.
 
 ---
 
-### 3. Client-Side Form Validation (`form_validation/index.html`)
-- **What it does:** Validates Name (min 3 chars), Email (has `@` and `.`), Mobile number (exactly 10 digits using `/^\d{10}$/`), and dropdown selection. Shows red inline errors without refreshing the page.
+## 2. Alternative A: "NO Pinia, Only Props and $emit"
+If the teacher asks for standard parent-to-child component communication without Pinia:
+
+### Concept:
+* **Parent (`App.vue`)** owns the data (`products = []`, `cart = []`).
+* **Parent -> Child:** Passes data down using `:product="p"` (Props).
+* **Child -> Parent:** Sends actions up using `@click="$emit('add-to-cart', product)"` (Custom Events).
+
+### Child Component (`ProductCard.vue` - 8 lines):
+```vue
+<template>
+  <div>
+    <span>{{ product.name }} - ₹{{ product.price }}</span>
+    <button @click="$emit('add-to-cart', product)">Add</button>
+  </div>
+</template>
+<script>
+export default { props: ['product'] }
+</script>
+```
+
+### Parent Component (`App.vue`):
+```vue
+<template>
+  <ProductCard 
+    v-for="p in products" 
+    :key="p.id" 
+    :product="p" 
+    @add-to-cart="cart.push($event)" 
+  />
+</template>
+<script setup>
+import { ref, onMounted } from 'vue'
+import ProductCard from './components/ProductCard.vue'
+
+const products = ref([])
+const cart = ref([])
+
+onMounted(async () => {
+  const res = await fetch('http://localhost:8080/api/products')
+  products.value = await res.json()
+})
+</script>
+```
 
 ---
 
-### 4. Calculator & Dynamic List (`todo_calculator/index.html`)
-- **What it does:** Performs `+`, `-`, `*`, `/` operations and lets users add and delete items dynamically.
+## 3. Alternative B: "Flat Routing (No Nested Children)"
+If the teacher wants pages/routes, but asks you not to use nested `children`:
+
+Just make all routes top-level in `src/router/index.js`:
+```javascript
+const routes = [
+  { path: '/', component: ProductsView },
+  { path: '/cart', component: CartView },
+  { path: '/about', component: AboutView },
+  { path: '/contact', component: ContactView }
+]
+```
+And link directly to them in `App.vue`:
+```html
+<router-link to="/">Products</router-link> |
+<router-link to="/cart">Cart</router-link> |
+<router-link to="/about">About</router-link> |
+<router-link to="/contact">Contact</router-link>
+```
+
+---
+
+## 4. Alternative C: "Single-File App.vue (No Router, No Pinia)"
+The absolute minimal 20-line single-file script:
+```vue
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const products = ref([])
+
+async function getProducts() {
+  const response = await fetch('http://localhost:8080/api/products')
+  products.value = await response.json()
+}
+
+onMounted(getProducts)
+</script>
+
+<template>
+  <h1>Product List</h1>
+  <ul>
+    <li v-for="product in products" :key="product.id">
+      {{ product.name }} - ₹{{ product.price }} (Stock: {{ product.stock }})
+    </li>
+  </ul>
+</template>
+```
+
+---
+
+## 5. Postman CRUD Reference
+
+| Operation | Method | URL | Body (raw JSON) |
+|---|---|---|---|
+| **Get All** | `GET` | `http://localhost:8080/api/products` | *(None)* |
+| **Create** | `POST` | `http://localhost:8080/api/products` | `{"name":"Headphones","price":1999.0,"stock":10}` |
+| **Get One** | `GET` | `http://localhost:8080/api/products/<id>` | *(None)* |
+| **Update** | `PUT` | `http://localhost:8080/api/products/<id>` | `{"name":"Headphones v2","price":2499.0,"stock":8}` |
+| **Delete** | `DELETE`| `http://localhost:8080/api/products/<id>` | *(None)* |
+| **Search** | `GET` | `http://localhost:8080/api/products/search?name=Head` | *(None)* |
+
+> ⚠️ **IMPORTANT:** Never put curly braces `{}` around the ID in the URL!  
+> ✅ `http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e`
