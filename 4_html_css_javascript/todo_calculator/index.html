@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculator & To-Do List</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 30px auto; }
+    .box { border: 1px solid #ddd; padding: 16px; border-radius: 8px; margin-bottom: 20px; }
+    input { padding: 6px; }
+    button { padding: 6px 12px; cursor: pointer; }
+    li { margin: 6px 0; }
+  </style>
+</head>
+<body>
+  <!-- 1. SIMPLE ARITHMETIC CALCULATOR -->
+  <div class="box">
+    <h3>1. Simple Calculator</h3>
+    <input type="number" id="n1" placeholder="Number 1" style="width: 100px;">
+    <input type="number" id="n2" placeholder="Number 2" style="width: 100px;">
+    <button onclick="calc('+')">+</button>
+    <button onclick="calc('-')">-</button>
+    <button onclick="calc('*')">&times;</button>
+    <button onclick="calc('/')">&divide;</button>
+    <h4>Result: <span id="calcRes">0</span></h4>
+  </div>
+
+  <!-- 2. DYNAMIC TO-DO / ITEM LIST -->
+  <div class="box">
+    <h3>2. Dynamic Item / To-Do List</h3>
+    <input type="text" id="todoInput" placeholder="Enter task / item">
+    <button onclick="addTodo()">Add Item</button>
+    <ul id="todoList"></ul>
+  </div>
+
+  <script>
+    // Calculator
+    function calc(op) {
+      const v1 = parseFloat(document.getElementById('n1').value) || 0;
+      const v2 = parseFloat(document.getElementById('n2').value) || 0;
+      let res = 0;
+      if (op === '+') res = v1 + v2;
+      if (op === '-') res = v1 - v2;
+      if (op === '*') res = v1 * v2;
+      if (op === '/') res = v2 !== 0 ? (v1 / v2) : 'Error (Divide by 0)';
+      document.getElementById('calcRes').innerText = res;
+    }
+
+    // Dynamic List
+    function addTodo() {
+      const inp = document.getElementById('todoInput');
+      const val = inp.value.trim();
+      if (!val) return;
+      const li = document.createElement('li');
+      li.innerHTML = `${val} <button onclick="this.parentElement.remove()" style="color:red; margin-left:8px;">Delete</button>`;
+      document.getElementById('todoList').appendChild(li);
+      inp.value = '';
+    }
+  </script>
+</body>
+</html>

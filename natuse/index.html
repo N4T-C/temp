@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Natuse Shop - Vue Frontend</title>
+  <!-- Load Vue 3 from CDN (no npm install needed!) -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 30px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    h1 {
+      color: #2c3e50;
+      margin-top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      background: #27ae60;
+      color: white;
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    /* Add Form */
+    .form-box {
+      background: #eef2f7;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .form-box input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      flex: 1;
+      min-width: 150px;
+    }
+    button {
+      padding: 10px 18px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    button.delete-btn {
+      background: #e74c3c;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    button.delete-btn:hover {
+      background: #c0392b;
+    }
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      background: #f8f9fa;
+      color: #555;
+    }
+    tr:hover {
+      background: #fafafa;
+    }
+    .status-msg {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .cart-summary {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff8e1;
+      border-left: 4px solid #f39c12;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app" class="container">
+  <h1>
+    🛒 Natuse Product Manager 
+    <span class="badge">{{ products.length }} Items</span>
+  </h1>
+
+  <!-- Alert Messages -->
+  <div v-if="message" :class="['status-msg', isError ? 'error' : 'success']">
+    {{ message }}
+  </div>
+
+  <!-- Form: Add New Product -->
+  <div class="form-box">
+    <input type="text" v-model="newProduct.name" placeholder="Product Name (e.g. Laptop)" required>
+    <input type="number" v-model.number="newProduct.price" placeholder="Price (₹)" step="0.01" required>
+    <input type="number" v-model.number="newProduct.stock" placeholder="Stock Count" required>
+    <button @click="addProduct">➕ Add Product</button>
+  </div>
+
+  <!-- Table: List Products -->
+  <div v-if="loading">Loading products from backend...</div>
+  
+  <table v-else>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in products" :key="item.id">
+        <td><code>{{ item.id }}</code></td>
+        <td><strong>{{ item.name }}</strong></td>
+        <td>₹{{ item.price }}</td>
+        <td>{{ item.stock }} units</td>
+        <td>
+          <button class="delete-btn" @click="deleteProduct(item.id)">Delete</button>
+        </td>
+      </tr>
+      <tr v-if="products.length === 0">
+        <td colspan="5" style="text-align: center; color: #888;">
+          No products found. Add one above!
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Cart / Stock Summary (Computed Property) -->
+  <div class="cart-summary" v-if="products.length > 0">
+    Total Inventory Value: ₹{{ totalInventoryValue.toFixed(2) }} | Total Units: {{ totalUnits }}
+  </div>
+</div>
+
+<script>
+  const { createApp, ref, computed, onMounted } = Vue;
+
+  createApp({
+    setup() {
+      const BASE_URL = 'http://localhost:8080/api/products';
+      
+      const products = ref([]);
+      const loading = ref(false);
+      const message = ref('');
+      const isError = ref(false);
+
+      const newProduct = ref({
+        name: '',
+        price: '',
+        stock: ''
+      });
+
+      // 1. Fetch products from Spring Boot backend (GET /api/products)
+      const fetchProducts = async () => {
+        loading.value = true;
+        try {
+          const res = await fetch(BASE_URL);
+          if (!res.ok) throw new Error('Failed to connect to Spring Boot backend');
+          products.value = await res.json();
+          isError.value = false;
+        } catch (err) {
+          message.value = 'Backend connection error! Make sure NatuseApplication is running.';
+          isError.value = true;
+        } finally {
+          loading.value = false;
+        }
+      };
+
+      // 2. Add product (POST /api/products)
+      const addProduct = async () => {
+        if (!newProduct.value.name || !newProduct.value.price) {
+          alert('Please enter Name and Price');
+          return;
+        }
+
+        try {
+          const res = await fetch(BASE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newProduct.value)
+          });
+          if (!res.ok) throw new Error('Error saving product');
+          
+          message.value = 'Product added successfully!';
+          isError.value = false;
+          
+          // Reset form
+          newProduct.value = { name: '', price: '', stock: '' };
+          // Refresh list
+          fetchProducts();
+        } catch (err) {
+          message.value = err.message;
+          isError.value = true;
+        }
+      };
+
+      // 3. Delete product (DELETE /api/products/{id})
+      const deleteProduct = async (id) => {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+
+        try {
+          const res = await fetch(`${BASE_URL}/${id}`, {
+            method: 'DELETE'
+          });
+          if (!res.ok) throw new Error('Error deleting product');
+
+          message.value = 'Product deleted successfully!';
+          isError.value = false;
+          fetchProducts();
+        } catch (err) {
+          message.value = err.message;
+          isError.value = true;
+        }
+      };
+
+      // Computed property to calculate total stock value
+      const totalInventoryValue = computed(() => {
+        return products.value.reduce((sum, p) => sum + (p.price * (p.stock || 0)), 0);
+      });
+
+      const totalUnits = computed(() => {
+        return products.value.reduce((sum, p) => sum + (p.stock || 0), 0);
+      });
+
+      onMounted(() => {
+        fetchProducts();
+      });
+
+      return {
+        products,
+        loading,
+        message,
+        isError,
+        newProduct,
+        addProduct,
+        deleteProduct,
+        totalInventoryValue,
+        totalUnits
+      };
+    }
+  }).mount('#app');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WAD Practical: Image Slider & Animation Demo</title>
+  <style>
+    /* 
+     * CSS STYLING
+     * Clean, simple styling to demonstrate layout and CSS animations
+     */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 16px;
+      margin: 0;
+    }
+
+    .container {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 550px;
+      width: 100%;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+
+    p.subtitle {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    /* Image Display Area */
+    .image-box {
+      width: 320px;
+      height: 220px;
+      margin: 0 auto 16px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0f172a;
+      cursor: pointer;
+      position: relative;
+    }
+
+    /* The SVG / Image inside */
+    .slider-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* CSS transition creates smooth rotation animation */
+      transition: transform 0.6s ease-in-out;
+    }
+
+    /*
+     * ROTATION ANIMATION CLASS
+     * Added dynamically by JavaScript when user clicks the image!
+     */
+    .rotate-active {
+      transform: rotate(360deg) scale(1.05);
+    }
+
+    .caption {
+      font-weight: 600;
+      color: #334155;
+      font-size: 15px;
+      margin-bottom: 18px;
+      min-height: 22px;
+    }
+
+    /* Controls (Prev, Next, Rotate) */
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: #ffffff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s, transform 0.05s;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button.btn-secondary {
+      background-color: #0f172a;
+    }
+
+    button.btn-secondary:hover {
+      background-color: #1e293b;
+    }
+
+    /* Quick Explainer Box for Viva */
+    .viva-box {
+      background: #f1f5f9;
+      border-left: 4px solid #2563eb;
+      padding: 14px;
+      text-align: left;
+      font-size: 13px;
+      border-radius: 0 6px 6px 0;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    .viva-box strong {
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>HTML, CSS & JavaScript Practical</h1>
+    <p class="subtitle">Image Slider with Next/Prev & Click-to-Rotate Animation</p>
+
+    <!-- 1. The Image Display Container -->
+    <div class="image-box" onclick="toggleRotation()" title="Click image to trigger 360 degree spin!">
+      <!-- We use high quality inline SVG images so it works offline with zero missing file paths! -->
+      <img id="display-image" class="slider-img" src="" alt="Slide Image">
+    </div>
+
+    <!-- 2. Image Caption -->
+    <div id="image-caption" class="caption">Loading...</div>
+
+    <!-- 3. Navigation Controls -->
+    <div class="btn-group">
+      <!-- onclick calls the JavaScript functions directly -->
+      <button onclick="prevImage()">&larr; Previous</button>
+      <button class="btn-secondary" onclick="toggleRotation()">&#8635; Rotate Image</button>
+      <button onclick="nextImage()">Next &rarr;</button>
+    </div>
+
+    <!-- 4. Viva / Code Notes -->
+    <div class="viva-box">
+      <strong>Viva / Code Highlights:</strong><br>
+      • <strong>Next/Prev logic:</strong> Managed using an array index and modulo operator: <code>index = (index + 1) % images.length</code>.<br>
+      • <strong>Rotate animation:</strong> Triggered via JavaScript <code>classList.toggle("rotate-active")</code> combined with CSS <code>transition: transform 0.6s</code>.<br>
+      • <strong>DOM Manipulation:</strong> Uses <code>document.getElementById()</code> to change <code>src</code> and <code>textContent</code>.
+    </div>
+  </div>
+
+  <script>
+    /*
+     * JAVASCRIPT LOGIC
+     * 1. Define image data array (Self-contained SVG data URIs for 100% offline reliability)
+     */
+    const slides = [
+      {
+        url: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 320 220'><rect width='100%' height='100%' fill='%231e3a8a'/><circle cx='160' cy='110' r='50' fill='%2360a5fa'/><text x='160' y='116' fill='white' font-size='18' font-family='sans-serif' text-anchor='middle' font-weight='bold'>Image 1: Blue Sphere</text></svg>",
+        caption: "Slide 1 of 3: Network Node"
+      },
+      {
+        url: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 320 220'><rect width='100%' height='100%' fill='%23065f46'/><polygon points='160,50 220,160 100,160' fill='%2334d399'/><text x='160' y='190' fill='white' font-size='18' font-family='sans-serif' text-anchor='middle' font-weight='bold'>Image 2: Green Triangle</text></svg>",
+        caption: "Slide 2 of 3: Security Gate"
+      },
+      {
+        url: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='220' viewBox='0 0 320 220'><rect width='100%' height='100%' fill='%23701a75'/><rect x='110' y='60' width='100' height='100' fill='%23f472b6'/><text x='160' y='190' fill='white' font-size='18' font-family='sans-serif' text-anchor='middle' font-weight='bold'>Image 3: Purple Cube</text></svg>",
+        caption: "Slide 3 of 3: Database Storage"
+      }
+    ];
+
+    // Current slide pointer
+    let currentIndex = 0;
+
+    // Grab elements from DOM
+    const imgElement = document.getElementById("display-image");
+    const captionElement = document.getElementById("image-caption");
+
+    // Function to update the image on screen
+    function updateSlide() {
+      imgElement.src = slides[currentIndex].url;
+      captionElement.textContent = slides[currentIndex].caption;
+    }
+
+    // Function to advance to next image
+    function nextImage() {
+      // Modulo (%) loops back to 0 when it exceeds the array length
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateSlide();
+    }
+
+    // Function to go back to previous image
+    function prevImage() {
+      // Adding slides.length ensures negative numbers don't occur when index is 0
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateSlide();
+    }
+
+    // Function to toggle CSS rotation class on click
+    function toggleRotation() {
+      imgElement.classList.toggle("rotate-active");
+    }
+
+    // Initialize initial slide on page load
+    updateSlide();
+  </script>
+</body>
+</html>

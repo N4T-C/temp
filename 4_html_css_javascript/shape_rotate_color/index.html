@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shape Rotate & Color Changer</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+    #box {
+      width: 150px;
+      height: 150px;
+      background-color: crimson;
+      margin: 30px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: transform 0.4s ease, background-color 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <h2>Click the Shape to Rotate 90° & Change Color</h2>
+  <div id="box">Click Me</div>
+  <p id="info">Angle: 0° | Color: Crimson</p>
+
+  <script>
+    const box = document.getElementById('box');
+    const info = document.getElementById('info');
+    const colors = ['crimson', 'dodgerblue', 'forestgreen', 'darkorange', 'purple'];
+    let angle = 0;
+    let colorIndex = 0;
+
+    box.onclick = function() {
+      // 1. Rotate 90 degrees
+      angle += 90;
+      box.style.transform = 'rotate(' + angle + 'deg)';
+
+      // 2. Change color
+      colorIndex = (colorIndex + 1) % colors.length;
+      box.style.backgroundColor = colors[colorIndex];
+
+      // 3. Update info text
+      info.innerText = 'Angle: ' + angle + '° | Color: ' + colors[colorIndex];
+    };
+  </script>
+</body>
+</html>

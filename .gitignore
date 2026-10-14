@@ -1,0 +1,8 @@
+# Ignored files
+node_modules/
+target/
+.idea/
+*.iml
+*.log
+dist/
+.DS_Store
