@@ -1355,3 +1355,207 @@ onMounted(getProducts)
   </ul>
 </template>
 ```
+
+
+# Voting Eligibility Servlet — Complete Lab Execution Guide
+
+*Tomcat 9 • Ubuntu / WSL • `javax.servlet` • POST form • Annotation-based mapping*
+
+This practical accepts a name and age, then displays whether the person is eligible to vote. It uses the same annotation-based approach as Hello Servlet. **No MySQL and no `web.xml` are required.**
+
+## Step 1 — Go to the Tomcat directory
+
+```bash
+cd /mnt/c/Directory/coding/web-dev/Practical_Exam/temp/Servlet/apache-tomcat-9.0.87
+```
+
+Use your own Tomcat 9 path if it is different.
+
+## Step 2 — Create the application folders
+
+```bash
+mkdir -p webapps/voting-servlet/WEB-INF/classes
+cd webapps/voting-servlet
+```
+
+This creates a separate application named `voting-servlet`, so your existing Hello Servlet is not overwritten.
+
+## Step 3 — Create `index.html`
+
+```bash
+nano index.html
+```
+
+Paste:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voting Eligibility</title>
+</head>
+<body>
+    <h2>Voting Eligibility</h2>
+    <form action="vote" method="post">
+        Name: <input type="text" name="name" required><br><br>
+        Age: <input type="number" name="age" required><br><br>
+        <input type="submit" value="Check Eligibility">
+    </form>
+</body>
+</html>
+```
+
+Save in Nano: **Ctrl+O**, press **Enter**, then **Ctrl+X**.
+
+## Step 4 — Create `VoteServlet.java`
+
+```bash
+nano VoteServlet.java
+```
+
+Paste:
+
+```java
+package com;
+
+import java.io.PrintWriter;
+import javax.servlet.http.*;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/vote")
+public class VoteServlet extends HttpServlet {
+
+    public void doPost(HttpServletRequest request,
+                       HttpServletResponse response) {
+
+        response.setContentType("text/html;charset=UTF-8");
+
+        try {
+            PrintWriter out = response.getWriter();
+
+            String name = request.getParameter("name");
+            int age = Integer.parseInt(request.getParameter("age"));
+
+            out.println("<html><body>");
+            out.println("<h2>Name: " + name + "</h2>");
+            out.println("<h2>Age: " + age + "</h2>");
+
+            if (age > 18) {
+                out.println("<h2>Eligible to vote</h2>");
+            } else {
+                out.println("<h2>Not eligible to vote</h2>");
+            }
+
+            out.println("</body></html>");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+Save: **Ctrl+O**, press **Enter**, then **Ctrl+X**.
+
+The `@WebServlet("/vote")` annotation maps the URL to this servlet, so `web.xml` is not needed. Since this uses Tomcat 9, keep the `javax.servlet` imports.
+
+## Step 5 — Compile the servlet
+
+Run this while inside the `voting-servlet` folder:
+
+```bash
+javac -cp "../../lib/*" -d WEB-INF/classes VoteServlet.java
+```
+
+If compilation succeeds, `javac` prints no errors. Check the compiled class:
+
+```bash
+ls WEB-INF/classes/com
+```
+
+Expected output:
+
+```text
+VoteServlet.class
+```
+
+## Step 6 — Check the folder structure
+
+```text
+voting-servlet/
+├── index.html
+├── VoteServlet.java
+└── WEB-INF/
+    └── classes/
+        └── com/
+            └── VoteServlet.class
+```
+
+There is no `web.xml` in this annotation-based version.
+
+## Step 7 — Start or restart Tomcat
+
+Return to the Tomcat root:
+
+```bash
+cd /mnt/c/Directory/coding/web-dev/Practical_Exam/temp/Servlet/apache-tomcat-9.0.87
+```
+
+If Tomcat is not already running, start it:
+
+```bash
+./bin/startup.sh
+```
+
+If you need to restart after recompiling, run:
+
+```bash
+./bin/shutdown.sh
+./bin/startup.sh
+```
+
+Do not start a second Tomcat instance if it is already running.
+
+## Step 8 — Test in the browser
+
+Open:
+
+**http://localhost:8080/voting-servlet/**
+
+Enter a name and age, then click **Check Eligibility**.
+
+Examples:
+
+- Name: Arun, Age: 20 → **Eligible to vote**
+- Name: Meena, Age: 18 → **Not eligible to vote**
+- Name: Ravi, Age: 16 → **Not eligible to vote**
+
+The condition is exactly as requested: age greater than 18 is eligible; age 18 or below is not eligible.
+
+## Step 9 — Common mistakes
+
+- **404 Not Found:** Verify the application folder name, compilation output, and `@WebServlet("/vote")`.
+- **405 Method Not Allowed:** The form must use `method="post"` because the servlet implements `doPost()`.
+- **Compile error:** Run `javac` from the `voting-servlet` folder and check that `../../lib/*` points to Tomcat's `lib` folder.
+- **Cannot connect to `localhost:8080`:** Check whether Tomcat is running and whether another application occupies port 8080.
+- **Tomcat 9:** Use `javax.servlet` imports, not `jakarta.servlet` imports.
+
+## One-minute memory sheet
+
+```bash
+1. cd <tomcat-root>
+2. mkdir -p webapps/voting-servlet/WEB-INF/classes
+3. cd webapps/voting-servlet
+4. nano index.html
+5. nano VoteServlet.java
+6. javac -cp "../../lib/*" -d WEB-INF/classes VoteServlet.java
+7. ls WEB-INF/classes/com
+8. cd <tomcat-root>
+9. ./bin/startup.sh
+10. Open http://localhost:8080/voting-servlet/
+```
+
+**Remember:** HTML form → POST `/vote` → `@WebServlet("/vote")` → `VoteServlet.doPost()` → display name, age, and voting eligibility.
+
+
+
