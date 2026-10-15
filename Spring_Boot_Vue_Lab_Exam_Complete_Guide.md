@@ -212,6 +212,174 @@ public class ControllerNat {
 }
 ```
 
+# POSTMAN API TESTING
+
+## Endpoints Overview
+
+| Operation | Method | URL | Request Body | Expected Response |
+|---|---|---|---|---|
+| Create Product | `POST` | `http://localhost:8080/api/products` | JSON object | 200 OK (created product with id) |
+| Get All Products | `GET` | `http://localhost:8080/api/products` | None | 200 OK (JSON array of products) |
+| Get Product by ID | `GET` | `http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e` | None | 200 OK (product object or null) |
+| Update Product | `PUT` | `http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e` | JSON object | 200 OK (updated product object or null) |
+| Delete Product | `DELETE` | `http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e` | None | 200 OK (void) |
+| Search Products | `GET` | `http://localhost:8080/api/products/search?name=Headphones` | None | 200 OK (JSON array of matching products) |
+
+## Create Product
+
+Method: `POST`
+
+URL:
+`http://localhost:8080/api/products`
+
+Headers:
+`Content-Type: application/json`
+
+Body → raw → JSON:
+
+```json
+{
+  "name": "Headphones",
+  "price": 1999.0,
+  "stock": 10
+}
+```
+
+Expected Response:
+200 OK with created product object including generated MongoDB id:
+```json
+{
+  "id": "6acc5cc42577d09cacd3c23e",
+  "name": "Headphones",
+  "price": 1999.0,
+  "stock": 10
+}
+```
+
+## Get All Products
+
+Method: `GET`
+
+URL:
+`http://localhost:8080/api/products`
+
+Headers:
+`Accept: application/json`
+
+Body: None.
+
+Expected Response:
+200 OK with JSON array of all stored products:
+```json
+[
+  {
+    "id": "6acc5cc42577d09cacd3c23e",
+    "name": "Headphones",
+    "price": 1999.0,
+    "stock": 10
+  }
+]
+```
+
+## Get Product by ID
+
+Method: `GET`
+
+URL:
+`http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e`
+
+Headers:
+`Accept: application/json`
+
+Path Parameter: id = 6acc5cc42577d09cacd3c23e (Use actual ID returned by POST or GET; never use literal curly braces).
+
+Body: None.
+
+Expected Response:
+200 OK with product object (or null if not found):
+```json
+{
+  "id": "6acc5cc42577d09cacd3c23e",
+  "name": "Headphones",
+  "price": 1999.0,
+  "stock": 10
+}
+```
+
+## Update Product
+
+Method: `PUT`
+
+URL:
+`http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e`
+
+Headers:
+`Content-Type: application/json`
+
+Path Parameter: id = 6acc5cc42577d09cacd3c23e (Use actual ID returned by POST or GET; never use literal curly braces).
+
+Body → raw → JSON:
+
+```json
+{
+  "name": "Headphones v2",
+  "price": 2499.0,
+  "stock": 8
+}
+```
+
+Expected Response:
+200 OK with updated product object (or null if not found):
+```json
+{
+  "id": "6acc5cc42577d09cacd3c23e",
+  "name": "Headphones v2",
+  "price": 2499.0,
+  "stock": 8
+}
+```
+
+## Delete Product
+
+Method: `DELETE`
+
+URL:
+`http://localhost:8080/api/products/6acc5cc42577d09cacd3c23e`
+
+Path Parameter: id = 6acc5cc42577d09cacd3c23e (Use actual ID returned by POST or GET; never use literal curly braces).
+
+Body: None.
+
+Expected Response:
+200 OK with empty response body.
+
+## Search Products by Name
+
+Method: `GET`
+
+URL:
+`http://localhost:8080/api/products/search?name=Headphones`
+
+Headers:
+`Accept: application/json`
+
+Query Parameter: name=Headphones
+
+Body: None.
+
+Expected Response:
+200 OK with JSON array of matching products:
+```json
+[
+  {
+    "id": "6acc5cc42577d09cacd3c23e",
+    "name": "Headphones",
+    "price": 1999.0,
+    "stock": 10
+  }
+]
+```
+
 # Vue.js Frontend
 
 ## Variant 1: Nested Vue Router with Pinia Global State Management
