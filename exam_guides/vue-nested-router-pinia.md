@@ -1,28 +1,28 @@
-## Variant 1: Nested Vue Router with Pinia Global State Management
+﻿## Variant 1: Nested Vue Router with Pinia Global State Management
 
 ### Project Structure
 
 ```text
 frontend/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── App.vue
-    ├── main.js
-    ├── router/
-    │   └── index.js
-    ├── stores/
-    │   └── productStore.js
-    ├── views/
-    │   ├── AboutView.vue
-    │   ├── CartView.vue
-    │   ├── ContactView.vue
-    │   ├── ProductsView.vue
-    │   └── TeamView.vue
-    └── components/
-        ├── CartItem.vue
-        └── ProductCard.vue
+â”œâ”€â”€ index.html
+â”œâ”€â”€ package.json
+â”œâ”€â”€ vite.config.js
+â””â”€â”€ src/
+    â”œâ”€â”€ App.vue
+    â”œâ”€â”€ main.js
+    â”œâ”€â”€ router/
+    â”‚   â””â”€â”€ index.js
+    â”œâ”€â”€ stores/
+    â”‚   â””â”€â”€ productStore.js
+    â”œâ”€â”€ views/
+    â”‚   â”œâ”€â”€ AboutView.vue
+    â”‚   â”œâ”€â”€ CartView.vue
+    â”‚   â”œâ”€â”€ ContactView.vue
+    â”‚   â”œâ”€â”€ ProductsView.vue
+    â”‚   â””â”€â”€ TeamView.vue
+    â””â”€â”€ components/
+        â”œâ”€â”€ CartItem.vue
+        â””â”€â”€ ProductCard.vue
 ```
 
 ### `index.html`
@@ -46,7 +46,7 @@ frontend/
 
 ```json
 {
-  "name": "natuse-frontend",
+  "name": "use-frontend",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -192,7 +192,7 @@ onMounted(() => store.fetchProducts())
     <h2>Products</h2>
     <ul>
       <li v-for="p in store.products" :key="p.id">
-        {{ p.name }} - ₹{{ p.price }} (Stock: {{ p.stock }})
+        {{ p.name }} - â‚¹{{ p.price }} (Stock: {{ p.stock }})
         <button @click="store.addToCart(p)">+ Add to Cart</button>
       </li>
     </ul>
@@ -223,7 +223,7 @@ const store = useProductStore()
   <p v-if="store.cart.length === 0">Your cart is empty.</p>
   <ul v-else>
     <li v-for="item in store.cart" :key="item.id" style="margin: 8px 0;">
-      {{ item.name }} - ₹{{ item.price }}
+      {{ item.name }} - â‚¹{{ item.price }}
       <button @click="store.removeFromCart(item.id)" style="margin-left: 10px;">Remove</button>
     </li>
   </ul>
@@ -263,7 +263,7 @@ const store = useProductStore()
 <template>
   <button @click="$emit('add', p)">+ Cart</button>
   <button @click="$emit('del', p.id)">Del</button>
-  {{ p.name }} - ₹{{ p.price }}
+  {{ p.name }} - â‚¹{{ p.price }}
 </template>
 <script>
 export default { props: ['p'] }
@@ -281,4 +281,5 @@ export default { props: ['p'] }
 export default { props: ['i'] }
 </script>
 ```
+
 

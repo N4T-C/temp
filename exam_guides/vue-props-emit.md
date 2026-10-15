@@ -1,18 +1,18 @@
-## Variant 3: Props and $emit Component Communication (Without Pinia, Without Router)
+﻿## Variant 3: Props and $emit Component Communication (Without Pinia, Without Router)
 
 ### Project Structure
 
 ```text
 frontend/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── App.vue
-    ├── main.js
-    └── components/
-        ├── CartItem.vue
-        └── ProductCard.vue
+â”œâ”€â”€ index.html
+â”œâ”€â”€ package.json
+â”œâ”€â”€ vite.config.js
+â””â”€â”€ src/
+    â”œâ”€â”€ App.vue
+    â”œâ”€â”€ main.js
+    â””â”€â”€ components/
+        â”œâ”€â”€ CartItem.vue
+        â””â”€â”€ ProductCard.vue
 ```
 
 ### `index.html`
@@ -130,7 +130,7 @@ onMounted(async () => {
 ```vue
 <template>
   <div>
-    <span>{{ product.name }} - ₹{{ product.price }}</span>
+    <span>{{ product.name }} - â‚¹{{ product.price }}</span>
     <button @click="$emit('add-to-cart', product)">Add</button>
   </div>
 </template>
@@ -147,7 +147,7 @@ export default {
 ```vue
 <template>
   <div>
-    <span>{{ item.name }} - ₹{{ item.price }}</span>
+    <span>{{ item.name }} - â‚¹{{ item.price }}</span>
     <button @click="$emit('remove-from-cart', item.id)">Remove</button>
   </div>
 </template>
@@ -158,4 +158,5 @@ export default {
 }
 </script>
 ```
+
 

@@ -1,24 +1,24 @@
-## Variant 2: Flat Vue Router Routes (No Nested Children, with Pinia)
+﻿## Variant 2: Flat Vue Router Routes (No Nested Children, with Pinia)
 
 ### Project Structure
 
 ```text
 frontend/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── App.vue
-    ├── main.js
-    ├── router/
-    │   └── index.js
-    ├── stores/
-    │   └── productStore.js
-    └── views/
-        ├── AboutView.vue
-        ├── CartView.vue
-        ├── ContactView.vue
-        └── ProductsView.vue
+â”œâ”€â”€ index.html
+â”œâ”€â”€ package.json
+â”œâ”€â”€ vite.config.js
+â””â”€â”€ src/
+    â”œâ”€â”€ App.vue
+    â”œâ”€â”€ main.js
+    â”œâ”€â”€ router/
+    â”‚   â””â”€â”€ index.js
+    â”œâ”€â”€ stores/
+    â”‚   â””â”€â”€ productStore.js
+    â””â”€â”€ views/
+        â”œâ”€â”€ AboutView.vue
+        â”œâ”€â”€ CartView.vue
+        â”œâ”€â”€ ContactView.vue
+        â””â”€â”€ ProductsView.vue
 ```
 
 ### `index.html`
@@ -42,7 +42,7 @@ frontend/
 
 ```json
 {
-  "name": "natuse-frontend",
+  "name": "use-frontend",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -184,7 +184,7 @@ onMounted(() => store.fetchProducts())
     <h2>Products</h2>
     <ul>
       <li v-for="p in store.products" :key="p.id">
-        {{ p.name }} - ₹{{ p.price }} (Stock: {{ p.stock }})
+        {{ p.name }} - â‚¹{{ p.price }} (Stock: {{ p.stock }})
         <button @click="store.addToCart(p)">+ Add to Cart</button>
       </li>
     </ul>
@@ -206,7 +206,7 @@ const store = useProductStore()
   <p v-if="store.cart.length === 0">Your cart is empty.</p>
   <ul v-else>
     <li v-for="item in store.cart" :key="item.id" style="margin: 8px 0;">
-      {{ item.name }} - ₹{{ item.price }}
+      {{ item.name }} - â‚¹{{ item.price }}
       <button @click="store.removeFromCart(item.id)" style="margin-left: 10px;">Remove</button>
     </li>
   </ul>
@@ -230,4 +230,5 @@ const store = useProductStore()
   <p>natc: 9999999999</p>
 </template>
 ```
+
 

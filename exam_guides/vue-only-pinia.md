@@ -1,20 +1,20 @@
-## Variant 4: Pinia-Based Global State Management (Without Router)
+﻿## Variant 4: Pinia-Based Global State Management (Without Router)
 
 ### Project Structure
 
 ```text
 frontend/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── App.vue
-    ├── main.js
-    ├── stores/
-    │   └── productStore.js
-    └── components/
-        ├── CartItem.vue
-        └── ProductCard.vue
+â”œâ”€â”€ index.html
+â”œâ”€â”€ package.json
+â”œâ”€â”€ vite.config.js
+â””â”€â”€ src/
+    â”œâ”€â”€ App.vue
+    â”œâ”€â”€ main.js
+    â”œâ”€â”€ stores/
+    â”‚   â””â”€â”€ productStore.js
+    â””â”€â”€ components/
+        â”œâ”€â”€ CartItem.vue
+        â””â”€â”€ ProductCard.vue
 ```
 
 ### `index.html`
@@ -166,7 +166,7 @@ const store = useProductStore()
 
 <template>
   <div style="margin: 8px 0;">
-    <span>{{ product.name }} - ₹{{ product.price }} (Stock: {{ product.stock }})</span>
+    <span>{{ product.name }} - â‚¹{{ product.price }} (Stock: {{ product.stock }})</span>
     <button @click="store.addToCart(product)" style="margin-left: 10px;">+ Add to Cart</button>
   </div>
 </template>
@@ -184,9 +184,10 @@ const store = useProductStore()
 
 <template>
   <div style="margin: 8px 0;">
-    <span>{{ item.name }} - ₹{{ item.price }}</span>
+    <span>{{ item.name }} - â‚¹{{ item.price }}</span>
     <button @click="store.removeFromCart(item.id)" style="margin-left: 10px;">Remove</button>
   </div>
 </template>
 ```
+
 

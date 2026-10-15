@@ -1,56 +1,56 @@
-# Spring Boot Backend
+﻿# Spring Boot Backend
 
 ## Project Structure
 
 ```text
-natuse/
-├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/
-│       │       └── example/
-│       │           └── natuse/
-│       │               ├── controller/
-│       │               │   └── ControllerNat.java
-│       │               ├── model/
-│       │               │   └── ModelNat.java
-│       │               ├── repository/
-│       │               │   └── RepositoryNat.java
-│       │               ├── service/
-│       │               │   └── ServiceNat.java
-│       │               └── NatuseApplication.java
-│       └── resources/
-│           └── application.properties
+use/
+â”œâ”€â”€ src/
+â”‚   â””â”€â”€ main/
+â”‚       â”œâ”€â”€ java/
+â”‚       â”‚   â””â”€â”€ com/
+â”‚       â”‚       â””â”€â”€ example/
+â”‚       â”‚           â””â”€â”€ use/
+â”‚       â”‚               â”œâ”€â”€ controller/
+â”‚       â”‚               â”‚   â””â”€â”€ ProductController.java
+â”‚       â”‚               â”œâ”€â”€ model/
+â”‚       â”‚               â”‚   â””â”€â”€ Product.java
+â”‚       â”‚               â”œâ”€â”€ repository/
+â”‚       â”‚               â”‚   â””â”€â”€ ProductRepository.java
+â”‚       â”‚               â”œâ”€â”€ service/
+â”‚       â”‚               â”‚   â””â”€â”€ ProductService.java
+â”‚       â”‚               â””â”€â”€ UseApplication.java
+â”‚       â””â”€â”€ resources/
+â”‚           â””â”€â”€ application.properties
 ```
 
 ## `src/main/resources/application.properties`
 
 ```properties
-spring.application.name=natuse
+spring.application.name=use
 ```
 
-## `src/main/java/com/example/natuse/NatuseApplication.java`
+## `src/main/java/com/example/use/UseApplication.java`
 
 ```java
-package com.example.natuse;
+package com.example.use;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class NatuseApplication {
+public class UseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NatuseApplication.class, args);
+        SpringApplication.run(UseApplication.class, args);
     }
 
 }
 ```
 
-## `src/main/java/com/example/natuse/model/ModelNat.java`
+## `src/main/java/com/example/use/model/Product.java`
 
 ```java
-package com.example.natuse.model;
+package com.example.use.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,7 +63,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "products")
-public class ModelNat {
+public class Product {
     @Id
     private String id;
     private String name;
@@ -72,12 +72,12 @@ public class ModelNat {
 }
 ```
 
-## `src/main/java/com/example/natuse/repository/RepositoryNat.java`
+## `src/main/java/com/example/use/repository/ProductRepository.java`
 
 ```java
-package com.example.natuse.repository;
+package com.example.use.repository;
 
-import com.example.natuse.model.ModelNat;
+import com.example.use.model.Product;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -85,20 +85,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RepositoryNat extends MongoRepository<ModelNat,String> {
-    List<ModelNat> findByName(String name);
-    List<ModelNat> findByPriceLessThan(double price);
-    List<ModelNat> findByStockGreaterThan(int minStock);
+public interface ProductRepository extends MongoRepository<Product,String> {
+    List<Product> findByName(String name);
+    List<Product> findByPriceLessThan(double price);
+    List<Product> findByStockGreaterThan(int minStock);
 }
 ```
 
-## `src/main/java/com/example/natuse/service/ServiceNat.java`
+## `src/main/java/com/example/use/service/ProductService.java`
 
 ```java
-package com.example.natuse.service;
+package com.example.use.service;
 
-import com.example.natuse.model.ModelNat;
-import com.example.natuse.repository.RepositoryNat;
+import com.example.use.model.Product;
+import com.example.use.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,24 +106,24 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ServiceNat {
-    private final RepositoryNat repo;
+public class ProductService {
+    private final ProductRepository repo;
 
     @Autowired
-    public ServiceNat( RepositoryNat repo){
+    public ProductService( ProductRepository repo){
         this.repo = repo;
     }
 
-    public List<ModelNat> getProducts()
+    public List<Product> getProducts()
     {
         return repo.findAll();
     }
 
-    public ModelNat getProductById(String id){
+    public Product getProductById(String id){
         return repo.findById(id).orElse(null);
     }
 
-    public ModelNat saveProduct(ModelNat product){
+    public Product saveProduct(Product product){
         return repo.save(product);
     }
 
@@ -131,9 +131,9 @@ public class ServiceNat {
         repo.deleteById(id);
     }
 
-    public ModelNat updateProduct(String id, ModelNat updatedData)
+    public Product updateProduct(String id, Product updatedData)
     {
-        ModelNat existing = repo.findById(id).orElse(null);
+        Product existing = repo.findById(id).orElse(null);
         if(existing != null){
             existing.setName(updatedData.getName());
             existing.setPrice(updatedData.getPrice());
@@ -143,20 +143,20 @@ public class ServiceNat {
         return null;
     }
 
-    public List<ModelNat> searchByName(String name){
+    public List<Product> searchByName(String name){
         return repo.findByName(name);
     }
 
 }
 ```
 
-## `src/main/java/com/example/natuse/controller/ControllerNat.java`
+## `src/main/java/com/example/use/controller/ProductController.java`
 
 ```java
-package com.example.natuse.controller;
+package com.example.use.controller;
 
-import com.example.natuse.model.ModelNat;
-import com.example.natuse.service.ServiceNat;
+import com.example.use.model.Product;
+import com.example.use.service.ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -166,34 +166,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/products")
 @CrossOrigin(origins="*")
-public class ControllerNat {
-    private final ServiceNat service;
+public class ProductController {
+    private final ProductService service;
 
     @Autowired
-    public ControllerNat(ServiceNat service)
+    public ProductController(ProductService service)
     {
         this.service = service;
     }
 
     @GetMapping
-    public List<ModelNat> getProducts(){
+    public List<Product> getProducts(){
         return service.getProducts();
     }
 
     @GetMapping("/{id}")
-    public ModelNat getProductById(@PathVariable String id)
+    public Product getProductById(@PathVariable String id)
     {
         return service.getProductById(id);
     }
 
     @PostMapping
-    public ModelNat saveProduct(@RequestBody ModelNat product)
+    public Product saveProduct(@RequestBody Product product)
     {
         return service.saveProduct(product);
     }
 
     @PutMapping("/{id}")
-    public ModelNat updateProduct(@PathVariable String id,@RequestBody ModelNat product)
+    public Product updateProduct(@PathVariable String id,@RequestBody Product product)
     {
         return service.updateProduct(id,product);
     }
@@ -205,7 +205,7 @@ public class ControllerNat {
     }
 
     @GetMapping("/search")
-    public List<ModelNat> searchByName(@RequestParam String name)
+    public List<Product> searchByName(@RequestParam String name)
     {
         return service.searchByName(name);
     }
@@ -235,7 +235,7 @@ URL:
 Headers:
 `Content-Type: application/json`
 
-Body → raw → JSON:
+Body â†’ raw â†’ JSON:
 
 ```json
 {
@@ -318,7 +318,7 @@ Headers:
 
 Path Parameter: id = 6acc5cc42577d09cacd3c23e (Use actual ID returned by POST or GET; never use literal curly braces).
 
-Body → raw → JSON:
+Body â†’ raw â†’ JSON:
 
 ```json
 {
@@ -379,4 +379,5 @@ Expected Response:
   }
 ]
 ```
+
 

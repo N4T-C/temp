@@ -1,15 +1,15 @@
-## Variant 5: Single-File App.vue (No Router, No Pinia)
+﻿## Variant 5: Single-File App.vue (No Router, No Pinia)
 
 ### Project Structure
 
 ```text
 frontend/
-├── index.html
-├── package.json
-├── vite.config.js
-└── src/
-    ├── App.vue
-    └── main.js
+â”œâ”€â”€ index.html
+â”œâ”€â”€ package.json
+â”œâ”€â”€ vite.config.js
+â””â”€â”€ src/
+    â”œâ”€â”€ App.vue
+    â””â”€â”€ main.js
 ```
 
 ### `index.html`
@@ -96,8 +96,9 @@ onMounted(getProducts)
 
   <ul>
     <li v-for="product in products" :key="product.id">
-      {{ product.name }} - ₹{{ product.price }} (Stock: {{ product.stock }})
+      {{ product.name }} - â‚¹{{ product.price }} (Stock: {{ product.stock }})
     </li>
   </ul>
 </template>
 ```
+
