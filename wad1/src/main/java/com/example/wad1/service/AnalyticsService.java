@@ -31,3 +31,51 @@ public class AnalyticsService {
         return total;
     }
 }
+
+
+/*
+package com.example.wad1.service;
+
+import org.bson.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.stereotype.Service;
+
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+
+@Service
+public class AnalyticsService {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    public double getTotalNetSalary() {
+        Aggregation aggregation = Aggregation.newAggregation(
+            // 1. Case-insensitive match for HR department
+            match(Criteria.where("department").regex("^HR$", "i")),
+            
+            // 2. Lookup (join) employee with payroll on employeeId
+            lookup("payroll", "employeeId", "employeeId", "payrolls"),
+            
+            // 3. Flatten payrolls array
+            unwind("payrolls"),
+            
+            // 4. Group and sum netSalary
+            group().sum("payrolls.netSalary").as("total")
+        );
+
+        AggregationResults<Document> results = mongoTemplate.aggregate(
+            aggregation, "employee", Document.class
+        );
+
+        Document doc = results.getUniqueMappedResult();
+        if (doc != null && doc.get("total") != null) {
+            return ((Number) doc.get("total")).doubleValue();
+        }
+        return 0.0;
+    }
+}
+*/
