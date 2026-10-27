@@ -1559,3 +1559,18 @@ The condition is exactly as requested: age greater than 18 is eligible; age 18 o
 
 
 
+WITH INTERNET (BEST CASE):
+
+curl -L https://www.github.com/Sharruk/temppcn/archive/refs/heads/main.zip -o t.zip
+Type everything from question into file and paste to [1][9]
+Browser in either system or in software
+ssh username @10.0.7.11 -> sys no
+git clone https://www.github.com/Sharruk/temppcn
+curl -fsSL https://opencode.ai/v2/install | bash , (restart) , opencode
+
+WITHOUT INTERNET:
+
+systemctl (start or restart or enable) NetworkManager
+man 3 getaddrinfo
+
+
