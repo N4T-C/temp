@@ -1,0 +1,1106 @@
+this is my model web dev paper question pls help fully
+
+develop a full stack payroll management web app using springboot,vue and mongodb alone i used maven thing in intellij and created the following files...
+
+mongodb model collections are : employee(employee id, employee name, department (hr,it,finance,admin),basic salary,designation) , payroll(payroll id,employee id, bonus,deductions, net salary, month)
+
+q1. develop dynamic single page app using vuejs
+a) frontend must use static variables (pls keep it all simple so my mam wont get suspicious) for fetching data from backend api springboot, create employee component thtaa display the employees of it department with responsive layout
+b) utilize fetch api to hit url http://localhost:8080/api/ITemployees from employee component
+
+q2. develop backend of payroll webapp with springboot mongdb and test urls using postman
+c)add new employee: method POST, api : http://localhost:8080/api/employee/addNew
+d)display the total net salary given for emplyees belonging to HR department Method: GET, API: http://localhost:8080/api/analytics/totalNET
+
+
+i have lombok. springweb and mongodb spring configured....keep that in mind and pls give codes for all files and give file structure for vue and what anol files to create and codes inside it...pleae give
+
+
+You are working inside my existing project directory.
+
+## OBJECTIVE
+
+I have provided you with a working Spring Boot + MongoDB CRUD application as a template. There is also a file named `question.txt` in the same directory.
+
+Your task is to read `question.txt`, understand the requirements, and implement the application according to those requirements, using my existing template code as the reference.
+
+I need a working application that I can run and demonstrate in my college lab examination.
+
+**Follow the instructions below in order. Do not skip any steps.**
+
+### STEP 1: INSPECT THE EXISTING PROJECT
+
+First, inspect the entire project structure.
+
+My existing template contains the following technologies:
+- Java
+- Spring Boot
+- Spring Data MongoDB
+- Lombok
+- MongoDB
+- REST APIs
+- Vue.js frontend with Vue Router
+
+The backend template contains:
+
+**Configuration**
+```properties
+spring.application.name=CrudDB
+server.port=8080
+spring.data.mongodb.uri=mongodb://localhost:27017/CrudDB
+```
+
+**Model classes**
+- `Student.java`
+- `Product.java`
+
+**Repository interfaces**
+- `StudentRepository.java`
+- `ProductRepository.java`
+
+**Service classes**
+- `StudentService.java`
+- `ProductService.java`
+
+**Controller classes**
+- `StudentController.java`
+- `ProductController.java`
+
+The template uses:
+- `@Document`
+- `@Id`
+- `@Data`
+- `MongoRepository`
+- `@Service`
+- `@RestController`
+- `@RequestMapping`
+- `@GetMapping`
+- `@PostMapping`
+- `@PutMapping`
+- `@DeleteMapping`
+- `@PathVariable`
+- `@RequestBody`
+
+It also uses Vue Router to navigate between CRUD pages.
+
+These are examples of the existing implementation. Inspect the actual source files rather than assuming that every detail above matches the current project.
+
+### STEP 2: READ question.txt
+
+Locate and read the complete contents of `question.txt` in the project directory.
+
+This file contains the actual application requirements for my lab examination.
+
+Identify:
+1. The entities or models required.
+2. Their fields and data types.
+3. The CRUD operations required.
+4. Any additional operations, such as searching or filtering.
+5. The expected frontend pages and functionality.
+6. Any specific restrictions or requirements mentioned in the question.
+
+**The requirements in `question.txt` take priority over the example Student and Product application.**
+
+Do not start implementing the application until you have inspected both the template and the question file.
+
+### STEP 3: IMPLEMENT THE BACKEND
+
+Use the existing template's architecture and coding style.
+
+Follow this structure wherever appropriate:
+
+```text
+src/main/java/com/example/crud/
+├── model/
+├── repository/
+├── service/
+└── controller/
+```
+
+Adapt the package structure if the existing project uses a different base package.
+
+Implement the required classes based on `question.txt`.
+
+#### Model
+- Use `@Document` to specify the MongoDB collection.
+- Use `@Id` for the primary identifier.
+- Use Lombok annotations such as `@Data`, `@NoArgsConstructor`, and `@AllArgsConstructor` where appropriate.
+- Use the correct field names and Java data types.
+
+#### Repository
+- Extend `MongoRepository<Entity, String>` when the entity uses a String ID.
+- Add custom repository methods only when required.
+
+#### Service
+- Implement the required CRUD operations.
+- Use the repository to interact with MongoDB.
+- Follow the template's straightforward coding style.
+
+#### Controller
+- Use `@RestController`.
+- Define clear API paths using `@RequestMapping`.
+- Implement the required GET, POST, PUT, and DELETE endpoints.
+- Use `@RequestBody` for JSON request bodies.
+- Use `@PathVariable` for path parameters.
+- Add search endpoints if the question requires them.
+- Use the template's basic HTTP status handling.
+
+Keep the code simple, readable, and suitable for a college lab examination.
+
+Do not introduce unnecessary interfaces, DTOs, complex exception-handling systems, authentication, security, or advanced architecture unless the question requires them.
+
+### STEP 4: CONFIGURE MONGODB
+
+Configure Spring Boot to connect to the local MongoDB server.
+
+Use the following configuration as the starting point:
+
+```properties
+spring.application.name=CrudDB
+server.port=8080
+spring.data.mongodb.uri=mongodb://localhost:27017/CrudDB
+```
+
+Change the database name if necessary to match the requirements.
+
+Verify that:
+- MongoDB is running locally.
+- Spring Boot can connect to MongoDB.
+- The application starts successfully.
+- The required collections are created when documents are inserted.
+
+Remember that MongoDB can create a database and collection automatically when data is first written. Do not assume they must already exist.
+
+### STEP 5: CREATE SAMPLE DATA IN MONGODB
+
+I need sample data so that I can test the backend immediately.
+
+Create a simple MongoDB initialization script named `populate.js` in the project root, or another clearly documented location.
+
+The script must:
+1. Select the database configured in `application.properties`.
+2. Insert realistic sample documents that match the models and fields defined by `question.txt`.
+3. Populate the required collections.
+4. Avoid inserting duplicate sample data every time the script is run, where practical.
+
+Do not use the original Student and Product sample fields unless they match the actual requirements.
+
+Explain exactly how to run the script using MongoDB Shell (`mongosh`).
+
+For example, if the script is in the project root:
+
+```bash
+mongosh "mongodb://localhost:27017/CrudDB" --file populate.js
+```
+
+Adapt this command if needed.
+
+Also provide commands to inspect the inserted data:
+
+```javascript
+show dbs
+use CrudDB
+show collections
+db.students.find()
+```
+
+Replace the example collection name with the actual collection names generated by the implementation.
+
+Explain how I can verify that the data exists in MongoDB Compass as well, if I have Compass installed.
+
+### STEP 6: TEST THE BACKEND WITH POSTMAN
+
+This is one of the most important requirements.
+
+I need to execute every required API operation successfully in Postman and verify that changes appear in MongoDB.
+
+Create a complete Postman testing guide based on the actual implementation.
+
+For every endpoint, provide:
+
+1. Operation name.
+2. HTTP method.
+3. Exact URL.
+4. Required headers.
+5. Request body, if applicable.
+6. Expected HTTP status.
+7. Expected response.
+8. How to verify the result in MongoDB.
+
+Include the following operations wherever required by `question.txt`:
+
+**A. GET ALL**
+```http
+GET http://localhost:8080/api/<resource>
+```
+
+Expected: A JSON array containing the stored documents.
+
+**B. GET BY ID**
+```http
+GET http://localhost:8080/api/<resource>/<id>
+```
+
+Expected: The matching document.
+
+**C. CREATE**
+```http
+POST http://localhost:8080/api/<resource>
+Content-Type: application/json
+```
+
+Provide a complete, valid JSON request body using the actual model fields.
+
+Expected: The created document, including its generated ID when applicable.
+
+**D. UPDATE**
+```http
+PUT http://localhost:8080/api/<resource>/<id>
+Content-Type: application/json
+```
+
+Provide a complete, valid JSON request body.
+
+Expected: The updated document.
+
+**E. DELETE**
+```http
+DELETE http://localhost:8080/api/<resource>/<id>
+```
+
+Expected: The response configured by the controller.
+
+**F. SEARCH**
+Include this operation only if it is required by `question.txt`.
+
+Provide the exact URL, query parameters, and expected response.
+
+Use actual endpoint names and model fields rather than leaving placeholders in the final testing guide.
+
+Use IDs returned by the CREATE or GET requests. Never invent MongoDB IDs for testing.
+
+### STEP 7: VERIFY THAT CRUD OPERATIONS REFLECT IN MONGODB
+
+Explain how to test the complete workflow:
+
+1. Run the MongoDB server.
+2. Start the Spring Boot application.
+3. Populate the database with sample documents.
+4. Send GET in Postman and verify the sample documents.
+5. Send POST and verify that a new document appears in MongoDB.
+6. Send GET again and verify the new document.
+7. Send PUT and verify that the document is updated.
+8. Send GET again and verify the updated values.
+9. Send DELETE and verify that the document is removed.
+10. Send GET again to confirm that the deleted document is no longer present.
+
+Include the actual MongoDB shell commands needed to inspect the collections after each operation.
+
+### STEP 8: CHECK AND RUN THE APPLICATION
+
+After implementing the code:
+
+1. Inspect the Maven dependencies in `pom.xml`.
+2. Confirm that Spring Web, Spring Data MongoDB, and Lombok are configured correctly.
+3. Check that the package names and imports are correct.
+4. Check that controller paths match the Postman URLs.
+5. Ensure the repository interfaces use the correct model classes.
+6. Compile the backend.
+7. Fix compilation errors that arise from your changes.
+8. Start the backend and check for startup errors.
+9. Test the endpoints if the environment allows you to run the required services.
+10. Report any tests that could not be executed because a required service was unavailable.
+
+Use the project's existing Maven wrapper when available.
+
+On Windows, the command may be:
+
+```powershell
+.\mvnw.cmd clean compile
+```
+
+On Linux or WSL, use:
+
+```bash
+./mvnw clean compile
+```
+
+Do not claim that the APIs work unless you have actually tested them or clearly distinguish untested steps.
+
+### STEP 9: IMPLEMENT OR UPDATE THE VUE FRONTEND
+
+Inspect the existing frontend and the Vue Router configuration.
+
+If the frontend is part of the question's requirements:
+- Implement the pages required by `question.txt`.
+- Connect the frontend to the Spring Boot API.
+- Use the correct backend URLs.
+- Use `fetch()` for API requests if that matches the template.
+- Keep the implementation simple and easy to understand.
+- Include the CRUD operations required by the question.
+- Ensure the frontend works with the configured backend.
+
+The backend API must remain the source of truth for the stored data.
+
+If the question requires only backend operations, do not add unnecessary frontend functionality.
+
+### STEP 10: FINAL OUTPUT
+
+After finishing the implementation, provide a concise report containing:
+
+**1. Requirements identified**
+- Summarize the requirements extracted from `question.txt`.
+
+**2. Files created or modified**
+- List each file and its purpose.
+
+**3. MongoDB setup**
+- Exact database name.
+- Collection names.
+- Commands to populate and inspect the database.
+
+**4. Backend execution**
+- Exact command to start the application.
+
+**5. Postman testing**
+- Every required endpoint with its HTTP method, URL, sample JSON body, and expected status.
+- Include sample IDs only when they are actual IDs returned during testing.
+
+**6. Frontend execution**
+- Exact commands to install dependencies and run the Vue application, if required.
+
+**7. Verification**
+- State which compilation and API tests passed.
+- Clearly report any remaining problems.
+
+## IMPORTANT RULES
+
+- Read `question.txt` completely before coding.
+- Use my existing working CRUD application as the template.
+- Do not blindly copy the Student and Product example if the question requires different entities.
+- Preserve the existing project structure where possible.
+- Do not unnecessarily rewrite unrelated files.
+- Do not delete existing files without a clear reason.
+- Do not create a second project when the current project can be adapted.
+- Do not hardcode MongoDB document IDs.
+- Do not assume the MongoDB database or collection already contains data.
+- Ensure the JSON field names match the Java model fields.
+- Ensure the Postman endpoints match the controller mappings exactly.
+- Keep the code minimal and suitable for an examination.
+- Prioritize a working backend, MongoDB persistence, and successful Postman testing.
+- If a command fails, inspect the error, fix the cause where possible, and retry.
+- If something cannot be verified, explain exactly what I need to do manually.
+
+**Start by inspecting the project and reading `question.txt`. Then implement, compile, test, and document the solution.**
+
+
+
+spring.application.name=CrudDB
+server.port=8080
+spring.data.mongodb.uri=mongodb://localhost:27017/CrudDB
+
+
+
+
+
+
+package com.example.crud.model;
+
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+
+
+@Data
+@Document(collection = "students")
+public class Student {
+
+
+    @Id
+    private String id;
+
+
+    private String name;
+    private int age;
+    private String course;
+}
+
+
+
+
+
+
+
+
+package com.example.crud.model;
+
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Data;
+
+
+@Data
+@Document(collection = "products")
+public class Product {
+
+
+    @Id
+    private String id;
+
+
+    private String name;
+    private double price;
+    private int quantity;
+}
+
+
+
+
+
+
+
+
+package com.example.crud.repository;
+
+
+import com.example.crud.model.Student;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+
+public interface StudentRepository extends MongoRepository<Student, String> {
+}
+
+
+
+
+
+package com.example.crud.repository;
+
+
+import com.example.crud.model.Product;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+
+public interface ProductRepository extends MongoRepository<Product, String> {
+}
+
+
+
+
+
+
+
+
+
+
+package com.example.crud.service;
+
+
+import com.example.crud.model.Student;
+import com.example.crud.repository.StudentRepository;
+import org.springframework.stereotype.Service;
+
+
+import java.util.List;
+import java.util.Optional;
+
+
+@Service
+public class StudentService {
+    private final StudentRepository repository;
+
+
+    public StudentService(StudentRepository repository) {
+        this.repository = repository;
+    }
+
+
+    public List<Student> getAllStudents() {
+        return repository.findAll();
+    }
+
+
+    public Optional<Student> getStudentById(String id) {
+        return repository.findById(id);
+    }
+
+
+    public Student addStudent(Student student) {
+        student.setId(null);
+        return repository.save(student);
+    }
+
+
+    public Student updateStudent(String id, Student student) {
+        student.setId(id);
+        return repository.save(student);
+    }
+
+
+    public void deleteStudent(String id) {
+        repository.deleteById(id);
+    }
+}
+
+
+
+
+
+
+
+
+
+package com.example.crud.service;
+
+
+import com.example.crud.model.Product;
+import com.example.crud.repository.ProductRepository;
+import org.springframework.stereotype.Service;
+
+
+import java.util.List;
+import java.util.Optional;
+
+
+@Service
+public class ProductService {
+    private final ProductRepository repository;
+
+
+    public ProductService(ProductRepository repository) {
+        this.repository = repository;
+    }
+
+
+    public List<Product> getAllProducts() {
+        return repository.findAll();
+    }
+
+
+    public Optional<Product> getProductById(String id) {
+        return repository.findById(id);
+    }
+
+
+    public Product addProduct(Product product) {
+        product.setId(null);
+        return repository.save(product);
+    }
+
+
+    public Product updateProduct(String id, Product product) {
+        product.setId(id);
+        return repository.save(product);
+    }
+
+
+    public void deleteProduct(String id) {
+        repository.deleteById(id);
+    }
+}
+
+
+
+
+
+
+
+
+package com.example.crud.controller;
+
+
+import com.example.crud.model.Student;
+import com.example.crud.service.StudentService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/api/students")
+@CrossOrigin(origins = "http://localhost:5173")
+public class StudentController {
+    private final StudentService service;
+
+
+    public StudentController(StudentService service) {
+        this.service = service;
+    }
+
+
+    @GetMapping
+    public List<Student> getAllStudents() {
+        return service.getAllStudents();
+    }
+
+
+    @GetMapping("/{id}")
+    public Student getStudentById(@PathVariable String id) {
+        return service.getStudentById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found"));
+    }
+
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Student addStudent(@RequestBody Student student) {
+        return service.addStudent(student);
+    }
+
+
+    @PutMapping("/{id}")
+    public Student updateStudent(@PathVariable String id, @RequestBody Student student) {
+        if (service.getStudentById(id).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
+        }
+        return service.updateStudent(id, student);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteStudent(@PathVariable String id) {
+        if (service.getStudentById(id).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
+        }
+        service.deleteStudent(id);
+    }
+}
+
+
+
+
+
+
+
+
+
+package com.example.crud.controller;
+
+
+import com.example.crud.model.Product;
+import com.example.crud.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/api/products")
+@CrossOrigin(origins = "http://localhost:5173")
+public class ProductController {
+    private final ProductService service;
+
+
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
+
+
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return service.getAllProducts();
+    }
+
+
+    @GetMapping("/{id}")
+    public Product getProductById(@PathVariable String id) {
+        return service.getProductById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+    }
+
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Product addProduct(@RequestBody Product product) {
+        return service.addProduct(product);
+    }
+
+
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable String id, @RequestBody Product product) {
+        if (service.getProductById(id).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+        return service.updateProduct(id, product);
+    }
+
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProduct(@PathVariable String id) {
+        if (service.getProductById(id).isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+        service.deleteProduct(id);
+    }
+}
+
+
+
+
+
+
+
+(base) sharruk@LAPTOP-4TV4FMR9:/mnt/c/Directory/coding/web-dev/Practical_Exam/temp/FullStack_Simple_CRUD_Basic_Router/Assignment8_CRUD/backend/src/main/java/com/example/crud$ tree
+.
+├── SimpleCrudApplication.java
+├── controller
+│   ├── ProductController.java
+│   └── StudentController.java
+├── model
+│   ├── Product.java
+│   └── Student.java
+├── repository
+│   ├── ProductRepository.java
+│   └── StudentRepository.java
+└── service
+    ├── ProductService.java
+    └── StudentService.java
+
+5 directories, 9 files
+(base) sharruk@LAPTOP-4TV4FMR9:/mnt/c/Directory/coding/web-dev/Practical_Exam/temp/FullStack_Simple_CRUD_Basic_Router/Assignment8_CRUD/backend/src/main/java/com/example/crud$ 
+
+
+
+
+
+(base) sharruk@LAPTOP-4TV4FMR9:/mnt/c/Directory/coding/web-dev/Practical_Exam/temp/FullStack_Simple_CRUD_Basic_Router/Assignment8_CRUD/frontend/src$ tree
+
+.
+├── App.vue
+├── components
+│   ├── CreateProduct.vue
+│   ├── CreateStudent.vue
+│   ├── DeleteProduct.vue
+│   ├── DeleteStudent.vue
+│   ├── ReadProducts.vue
+│   ├── ReadStudents.vue
+│   ├── UpdateProduct.vue
+│   └── UpdateStudent.vue
+└── main.js
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const name = ref('')
+const price = ref('')
+const quantity = ref('')
+const message = ref('')
+
+async function createProduct() {
+  await axios.post('/api/products', {
+    name: name.value,
+    price: Number(price.value),
+    quantity: Number(quantity.value)
+  })
+  name.value = ''
+  price.value = ''
+  quantity.value = ''
+  message.value = 'Product created.'
+}
+</script>
+
+<template>
+  <section>
+    <h2>Create Product</h2>
+    <form @submit.prevent="createProduct">
+      <p><label>Name: <input v-model="name" required></label></p>
+      <p><label>Price: <input v-model="price" type="number" step="0.01" required></label></p>
+      <p><label>Quantity: <input v-model="quantity" type="number" required></label></p>
+      <button type="submit">Create</button>
+    </form>
+    <p>{{ message }}</p>
+  </section>
+</template>
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const name = ref('')
+const age = ref('')
+const course = ref('')
+const message = ref('')
+
+async function createStudent() {
+  await axios.post('/api/students', {
+    name: name.value,
+    age: Number(age.value),
+    course: course.value
+  })
+  name.value = ''
+  age.value = ''
+  course.value = ''
+  message.value = 'Student created.'
+}
+</script>
+
+<template>
+  <section>
+    <h2>Create Student</h2>
+    <form @submit.prevent="createStudent">
+      <p><label>Name: <input v-model="name" required></label></p>
+      <p><label>Age: <input v-model="age" type="number" required></label></p>
+      <p><label>Course: <input v-model="course" required></label></p>
+      <button type="submit">Create</button>
+    </form>
+    <p>{{ message }}</p>
+  </section>
+</template>
+
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const id = ref('')
+const message = ref('')
+
+async function deleteProduct() {
+  await axios.delete(`/api/products/${id.value}`)
+  id.value = ''
+  message.value = 'Product deleted.'
+}
+</script>
+
+<template>
+  <section>
+    <h2>Delete Product</h2>
+    <form @submit.prevent="deleteProduct">
+      <p><label>Product ID: <input v-model="id" required></label></p>
+      <button type="submit">Delete</button>
+    </form>
+    <p>{{ message }}</p>
+  </section>
+</template>
+
+
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const id = ref('')
+const message = ref('')
+
+async function deleteStudent() {
+  await axios.delete(`/api/students/${id.value}`)
+  id.value = ''
+  message.value = 'Student deleted.'
+}
+</script>
+
+<template>
+  <section>
+    <h2>Delete Student</h2>
+    <form @submit.prevent="deleteStudent">
+      <p><label>Student ID: <input v-model="id" required></label></p>
+      <button type="submit">Delete</button>
+    </form>
+    <p>{{ message }}</p>
+  </section>
+</template>
+
+
+
+
+
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const products = ref([])
+
+onMounted(async () => {
+  const response = await axios.get('/api/products')
+  products.value = response.data
+})
+</script>
+
+<template>
+  <section>
+    <h2>Read Products</h2>
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Price</th><th>Quantity</th></tr>
+      </thead>
+      <tbody>
+        <tr v-for="product in products" :key="product.id">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.quantity }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</template>
+
+
+
+
+
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
+
+const students = ref([])
+
+onMounted(async () => {
+  const response = await axios.get('/api/students')
+  students.value = response.data
+})
+</script>
+
+<template>
+  <section>
+    <h2>Read Students</h2>
+    <table border="1" cellpadding="6">
+      <thead>
+        <tr><th>ID</th><th>Name</th><th>Age</th><th>Course</th></tr>
+      </thead>
+      <tbody>
+        <tr v-for="student in students" :key="student.id">
+          <td>{{ student.id }}</td>
+          <td>{{ student.name }}</td>
+          <td>{{ student.age }}</td>
+          <td>{{ student.course }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</template>
+
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const id = ref('')
+const name = ref('')
+const price = ref('')
+const quantity = ref('')
+const message = ref('')
+
+async function updateProduct() {
+  await axios.put(`/api/products/${id.value}`, {
+    name: name.value,
+    price: Number(price.value),
+    quantity: Number(quantity.value)
+  })
+  message.value = 'Product updated.'
+}
+</script>
+
+<template>
+  <section>
+    <h2>Update Product</h2>
+    <form @submit.prevent="updateProduct">
+      <p><label>Product ID: <input v-model="id" required></label></p>
+      <p><label>Name: <input v-model="name" required></label></p>
+      <p><label>Price: <input v-model="price" type="number" step="0.01" required></label></p>
+      <p><label>Quantity: <input v-model="quantity" type="number" required></label></p>
+      <button type="submit">Update</button>
+    </form>
+    <p>{{ message }}</p>
+  </section>
+</template>
+
+
+
+
+
+
+
+
+
+
+
+
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+
+const id = ref('')
+const name = ref('')
+const age = ref('')
+const course = ref('')
+const message = ref('')
+
+async function updateStudent() {
+  await axios.put(`/api/students/${id.value}`, {
+    name: name.value,
+    age: Number(age.value),
+    course: course.value
+  })
+  message.value = 'Student updated.'
+}
+</script>
+
+<template>
+  <section>
+    <h2>Update Student</h2>
+    <form @submit.prevent="updateStudent">
+      <p><label>Student ID: <input v-model="id" required></label></p>
+      <p><label>Name: <input v-model="name" required></label></p>
+      <p><label>Age: <input v-model="age" type="number" required></label></p>
+      <p><label>Course: <input v-model="course" required></label></p>
+      <button type="submit">Update</button>
+    </form>
+    <p>{{ message }}</p>
+  </section>
+</template>
+
+
+
+
+
+<template>
+  <div>
+    <h1>Product CRUD Application</h1>
+    <nav>
+      <strong>Products:</strong>
+      <router-link to="/create">Create</router-link> |
+      <router-link to="/read">Read</router-link> |
+      <router-link to="/update">Update</router-link> |
+      <router-link to="/delete">Delete</router-link>
+    </nav>
+    <hr>
+    <nav>
+      <strong>Students:</strong>
+      <router-link to="/students/create">Create</router-link> |
+      <router-link to="/students/read">Read</router-link> |
+      <router-link to="/students/update">Update</router-link> |
+      <router-link to="/students/delete">Delete</router-link>
+    </nav>
+    <hr>
+    <router-view />
+  </div>
+</template>
+
+
+
+
+
