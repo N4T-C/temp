@@ -1,0 +1,347 @@
+I have an existing working CRUD application in this project. I have also provided a file named `question.txt` in the same directory.
+
+Your task is to read `question.txt` and implement the application according to the question, using my existing CRUD application as the template.
+
+I need a simple, working application suitable for my college lab examination. Do not overcomplicate the code.
+
+## 1. FIRST: READ THE FILES
+
+Before making any changes:
+
+1. Inspect the existing project structure.
+2. Read the complete contents of `question.txt`.
+3. Examine the existing Spring Boot backend and Vue frontend.
+4. Understand how the existing template implements CRUD operations.
+5. Follow the same coding style, package structure, annotations, and approach wherever possible.
+
+The requirements in `question.txt` determine which entities, fields, and operations are needed.
+
+Do not blindly copy the Student and Product examples if the question specifies different entities.
+
+## 2. BACKEND: SPRING BOOT + MONGODB
+
+Implement only the CRUD operations required by `question.txt`.
+
+Follow the existing template's structure:
+
+```text
+src/main/java/com/example/crud/
+├── model/
+├── repository/
+├── service/
+└── controller/
+```
+
+Adapt the package name to the existing project if necessary.
+
+### Model
+- Use `@Document` for MongoDB collections.
+- Use `@Id` for the document identifier.
+- Use Lombok annotations such as `@Data`, `@NoArgsConstructor`, and `@AllArgsConstructor` where appropriate.
+- Use exactly the fields and data types required by the question.
+
+### Repository
+- Extend `MongoRepository` with the correct model and ID types.
+- Add custom methods only if required.
+
+### Service
+Implement the required operations:
+- Create
+- Read all
+- Read by ID, if required
+- Update
+- Delete
+
+Follow the existing template's simple approach.
+
+### Controller
+Use the appropriate annotations:
+- `@RestController`
+- `@RequestMapping`
+- `@GetMapping`
+- `@PostMapping`
+- `@PutMapping`
+- `@DeleteMapping`
+- `@PathVariable`
+- `@RequestBody`
+
+Use straightforward methods and simple code.
+
+Do not introduce unnecessary DTOs, interfaces, advanced exception handling, authentication, security, or additional architecture.
+
+**Important:** Implement only what the question requires. Do not add unrelated features.
+
+## 3. APPLICATION.PROPERTIES AND MONGODB NAMING
+
+Create or update `src/main/resources/application.properties`.
+
+Use a clear, consistent naming convention. The Spring Boot application name and MongoDB database name should be easy to identify.
+
+For example, if the application is a payroll application:
+
+```properties
+spring.application.name=payroll
+server.port=8080
+spring.data.mongodb.uri=mongodb://localhost:27017/payrollDB
+```
+
+Use the actual application and database names appropriate to `question.txt`.
+
+Follow these naming rules:
+
+1. The application name should clearly identify the application.
+2. The MongoDB database name must match the database specified in the connection URI.
+3. The collection name must match the entity's `@Document(collection = "...")` annotation.
+4. Keep the names consistent throughout the project.
+5. Do not add duplicate or unnecessary MongoDB configuration properties.
+6. Use `spring.data.mongodb.uri` for the MongoDB connection configuration.
+
+For example:
+
+```properties
+spring.application.name=payroll
+server.port=8080
+spring.data.mongodb.uri=mongodb://localhost:27017/payrollDB
+```
+
+Here:
+- Application name: `payroll`
+- Database name: `payrollDB`
+- Collection name: Determined by the entity's `@Document` annotation.
+
+**Important distinction:** The application name, database name, and collection name are separate things. They do not need to be identical, but their configuration must be consistent and understandable.
+
+When the frontend creates, updates, or deletes a record, the corresponding MongoDB collection must reflect that change through the Spring Boot API.
+
+Do not store frontend changes only in Vue variables. All CRUD operations must persist to MongoDB.
+
+## 4. FRONTEND: VUE.JS
+
+Keep the frontend extremely simple.
+
+Use the existing Vue project and follow the template.
+
+### Requirements
+
+- Use `App.vue` as the main page.
+- Put the main CRUD functionality directly in `App.vue`.
+- Use only one or two simple components if genuinely necessary.
+- Do not create unnecessary components.
+- Do not use CSS frameworks.
+- Do not add styles, animations, themes, or decorative layouts.
+- Use plain HTML elements.
+- Keep the code short and easy to memorise for an examination.
+
+Use Vue 3 Composition API with `<script setup>` if that matches the existing template.
+
+Use `fetch()` to connect to the Spring Boot backend.
+
+For example:
+
+```javascript
+const API = 'http://localhost:8080/api/<resource>'
+```
+
+Replace `<resource>` with the actual endpoint required by the question.
+
+Implement the required operations using the backend API:
+
+- GET: Fetch and display records.
+- POST: Send a new record.
+- PUT: Update an existing record.
+- DELETE: Delete a record.
+
+Use `ref()` for reactive variables and `onMounted()` to load records when the page opens.
+
+Use `v-model` for form inputs and `v-for` to display records.
+
+Keep the frontend functionality basic. Do not add unnecessary validation, complex error handling, state management, or routing unless the question explicitly requires them.
+
+The frontend must use the actual backend endpoints and field names.
+
+## 5. CREATE A SEPARATE POSTMAN TESTING FILE
+
+Create a new file in the project root named:
+
+`POSTMAN_COMMANDS.md`
+
+Do not put the Postman instructions inside `App.vue` or another source file.
+
+This document must contain all the Postman requests required to test the backend.
+
+For each request, include:
+
+1. Operation name.
+2. HTTP method.
+3. Exact URL.
+4. Required headers.
+5. Sample JSON request body, where applicable.
+6. Expected HTTP status.
+7. Expected response.
+8. How to verify the change in MongoDB.
+
+Include these operations wherever required by the question:
+
+### A. GET ALL
+
+```http
+GET http://localhost:8080/api/<resource>
+```
+
+Expected: A JSON array of stored records.
+
+### B. GET BY ID
+
+```http
+GET http://localhost:8080/api/<resource>/<id>
+```
+
+Expected: The matching record.
+
+Include this operation only if required.
+
+### C. CREATE
+
+```http
+POST http://localhost:8080/api/<resource>
+Content-Type: application/json
+```
+
+Provide a complete JSON request body containing the actual fields from the model.
+
+Expected: The newly created record.
+
+### D. UPDATE
+
+```http
+PUT http://localhost:8080/api/<resource>/<id>
+Content-Type: application/json
+```
+
+Provide a complete JSON request body.
+
+Use the actual ID returned by the CREATE request.
+
+Expected: The updated record.
+
+### E. DELETE
+
+```http
+DELETE http://localhost:8080/api/<resource>/<id>
+```
+
+Use the actual ID of an existing record.
+
+Expected: The HTTP status and response configured by the controller.
+
+### F. ADDITIONAL OPERATIONS
+
+Include search or other operations only if `question.txt` requires them.
+
+**Do not leave placeholders in the final Postman document.** Replace `<resource>` with the actual endpoint and use the actual model fields.
+
+Ensure that every URL matches the controller's `@RequestMapping` and method mappings.
+
+## 6. MONGODB DATA POPULATION
+
+Create a separate file named:
+
+`populate.js`
+
+Place it in the project root.
+
+The script should insert a few sample records into the correct MongoDB collection using the fields required by `question.txt`.
+
+Requirements:
+
+- Select the correct database.
+- Use the correct collection name.
+- Insert valid sample documents.
+- Avoid duplicate sample data when the script is rerun, where practical.
+- Do not use unrelated Student or Product data unless required by the question.
+
+Provide the exact command to execute the script with `mongosh`.
+
+For example:
+
+```bash
+mongosh "mongodb://localhost:27017/payrollDB" --file populate.js
+```
+
+Adapt the command to the actual database name.
+
+Also include example commands to inspect the data:
+
+```javascript
+show dbs
+use payrollDB
+show collections
+db.<collectionName>.find()
+```
+
+Replace `<collectionName>` with the actual collection name.
+
+Explain briefly how to verify the same records using MongoDB Compass, if available.
+
+Remember that MongoDB creates the database and collection automatically when data is first written, unless special configuration or permissions prevent it.
+
+## 7. TEST THE COMPLETE APPLICATION
+
+After implementing the code:
+
+1. Check the Maven dependencies.
+2. Compile the Spring Boot backend.
+3. Fix compilation errors caused by your changes.
+4. Ensure the MongoDB configuration is correct.
+5. Start the backend.
+6. Verify that the API endpoints match the Postman document.
+7. Test the CRUD endpoints if the environment allows it.
+8. Verify that database changes persist in MongoDB.
+9. Ensure the Vue frontend calls the correct backend URLs.
+10. Verify the Vue application builds successfully if possible.
+
+Use the existing Maven wrapper.
+
+For Windows:
+
+```powershell
+.\mvnw.cmd clean compile
+```
+
+For WSL/Linux:
+
+```bash
+./mvnw clean compile
+```
+
+Run the frontend using the existing project's package manager and scripts. Do not create another Vue project.
+
+If a service is unavailable, explain exactly what I need to start or test manually.
+
+Do not claim that an operation works unless you have tested it or clearly identify it as untested.
+
+## 8. FINAL PROJECT REQUIREMENTS
+
+Keep the final implementation minimal.
+
+Create or update only the files necessary to satisfy the question.
+
+The final deliverables must include:
+
+1. Working Spring Boot backend.
+2. Correct MongoDB configuration.
+3. Required CRUD API endpoints.
+4. Simple Vue frontend, primarily in `App.vue`.
+5. `POSTMAN_COMMANDS.md` containing the complete testing instructions.
+6. `populate.js` containing sample MongoDB data.
+7. A short execution guide.
+
+Preserve the existing project and its structure wherever possible. Do not delete unrelated files or create a second project.
+
+## FINAL INSTRUCTION
+
+**Start by reading `question.txt` and inspecting my existing CRUD template. Then implement the application required by the question using the same template and coding style.**
+
+Prioritise correctness, simplicity, and working CRUD operations over design.
+
+I need to understand and reproduce this code during my college lab examination, so keep every file straightforward and easy to memorise.
